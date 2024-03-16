@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: e-commerce
+      MYSQL_USER: rachit
+      MYSQL_PASSWORD: 123456
+    ports:
+      - "3307:3306"
+    networks:
+      - mynetwork
+
+  rails:
+    build: ./
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/docker/app
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
