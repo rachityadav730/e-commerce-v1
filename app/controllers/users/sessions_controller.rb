@@ -7,7 +7,9 @@ class Users::SessionsController < Devise::SessionsController
     render json: {
       status: { 
         code: 200, message: 'Logged in successfully.',
-        data: { user: UserSerializer.new(current_user).serializable_hash[:data][:attributes] }
+        data: { user: UserSerializer.new(current_user).serializable_hash[:data][:attributes]
+      },
+      token: generate_jwt_token(current_user)
       }
     }, status: :ok
   end
@@ -29,4 +31,9 @@ class Users::SessionsController < Devise::SessionsController
       }, status: :unauthorized
     end
   end
+
+  def generate_jwt_token(user)
+    JWT.encode({ user_id: user.id, exp: 24.hours.from_now.to_i }, Rails.application.credentials.devise_jwt_secret_key)
+  end
 end
+
