@@ -4,6 +4,7 @@ class Api::V1::AddressesController < ApplicationController
     def create
         @current_user = current_user
         if params[:address].present?
+            p "asdfasdfasdf",params
             @shopping_address = current_user.addresses.new(allowed_params)
             @shopping_address.save
             @form_address = @shopping_address
@@ -14,7 +15,7 @@ class Api::V1::AddressesController < ApplicationController
         }
 
     end
-
+    
     private
 
     def allowed_params
