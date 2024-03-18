@@ -15,7 +15,7 @@ class Users::SessionsController < Devise::SessionsController
   end
   def respond_to_on_destroy
     if request.headers['Authorization'].present?
-      jwt_payload = JWT.decode(request.headers['Authorization'].split(' ').last, Rails.application.credentials.devise_jwt_secret_key!).first
+      jwt_payload = JWT.decode(request.headers['Authorization'].split(' ').last, ENV['DEVISE_SECRET_KEY']).first
       current_user = User.find(jwt_payload['sub'])
     end
     
@@ -33,7 +33,7 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def generate_jwt_token(user)
-    JWT.encode({ user_id: user.id, exp: 24.hours.from_now.to_i }, Rails.application.credentials.devise_jwt_secret_key)
+    JWT.encode({ user_id: user.id, exp: 24.hours.from_now.to_i }, ENV['DEVISE_SECRET_KEY'])
   end
 end
 
